@@ -45,5 +45,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=port,
         reload=(os.getenv("APP_RELOAD", "false").lower() == "true"),
-        workers=8
+        workers=1
     )
