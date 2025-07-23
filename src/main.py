@@ -38,7 +38,7 @@ app.include_router(completions.router, prefix="/api/levels")
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 7860))
     # Note: uvicorn.run() is great for simple testing. For production, it's better to
     # use a command-line process manager like Gunicorn with Uvicorn workers:
     # `gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app`
