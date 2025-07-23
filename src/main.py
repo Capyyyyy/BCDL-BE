@@ -1,11 +1,11 @@
 import asyncpg
-import asyncio
 from dotenv import load_dotenv
 import os
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 import uvicorn
-from db import get_connection
+
+from routes import completions, levels, players
 
 load_dotenv()
 
@@ -17,20 +17,22 @@ async def lifespan(app: FastAPI):
         dsn=os.getenv("DATABASE_URL"),
         min_size=1,
         max_size=10,
-        statement_cache_size=128  # or leave it out if using session mode
+        statement_cache_size=128,  # or leave it out if using session mode
     )
-
 
     yield  # ⏸️ Here the app runs
 
     # Shutdown
     await app.state.pool.close()
 
+
 app = FastAPI(lifespan=lifespan)
 
 
-from routes import completions, levels, players
-app.include_router(levels.router, prefix="/api")
+
+
+app.include_router(levels.router, prefix="/api/levels")
+app.include_router(levels.router)
 app.include_router(players.router, prefix="/api")
 app.include_router(completions.router, prefix="/api/levels")
 
@@ -45,5 +47,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=port,
         reload=(os.getenv("APP_RELOAD", "false").lower() == "true"),
-        workers=1
+        workers=1,
     )
